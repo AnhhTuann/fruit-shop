@@ -48,3 +48,16 @@ h4 {
 .main {
   overflow: hidden; /* For animation ScrollReveal */
 }
+
+.button {
+  display: inline-block;
+  background-color: $first-color;
+  padding: 1rem 2rem;
+  border-radius: 4rem;
+  color: $white-color;
+  font-weight: $font-semi-bold;
+  transition: box-shadow 0.4s;
+  &:hover {
+    box-shadow: 0 8px 24px rgba(140, 40%, 48%, 0.3);
+  }
+}

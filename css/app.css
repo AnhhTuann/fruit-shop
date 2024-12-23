@@ -106,6 +106,19 @@ h4 {
   overflow: hidden; /* For animation ScrollReveal */
 }
 
+.button {
+  display: inline-block;
+  background-color: hsl(140, 40%, 48%);
+  padding: 1rem 2rem;
+  border-radius: 4rem;
+  color: hsl(0, 0%, 100%);
+  font-weight: 600;
+  transition: box-shadow 0.4s;
+}
+.button:hover {
+  box-shadow: 0 8px 24px rgba(140, 102, 122.4, 0.3);
+}
+
 body {
   font-family: "Poppins", sans-serif;
 }
@@ -179,10 +192,6 @@ body {
   bottom: 2.5rem;
 }
 
-.show-menu {
-  top: 0;
-}
-
 @media screen and (max-width: 1150px) {
   .nav__menu {
     position: fixed;
@@ -194,6 +203,52 @@ body {
     padding-block: 4.5rem;
     transition: top 0.4s;
   }
+}
+.shadow-header {
+  box-shadow: 0 2px 16px hsla(0, 0%, 0%, 0.1);
+}
+
+.show-menu {
+  top: 0;
+}
+
+.home {
+  position: relative;
+}
+.home__container {
+  padding-top: 2.5rem;
+  row-gap: 2rem;
+}
+.home__data {
+  position: relative;
+  text-align: center;
+}
+.home__title {
+  font-size: 3rem;
+  font-family: "Cherry Bomb One", cursive;
+  margin-bottom: 1rem;
+}
+.home__description {
+  margin-bottom: 2rem;
+}
+.home__fruit, .home__branch {
+  filter: invert(1);
+  position: absolute;
+}
+.home__fruit {
+  width: 40px;
+  top: 6.75rem;
+  left: 1rem;
+}
+.home__img {
+  width: 320px;
+  justify-self: center;
+  filter: drop-shadow(0 8px 12px hsla(0, 0%, 0%, 0.2));
+}
+.home__branch {
+  width: 120px;
+  right: -3rem;
+  bottom: 15rem;
 }
 
 /*# sourceMappingURL=app.css.map */
