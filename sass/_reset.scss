@@ -4,6 +4,10 @@ html {
 * {
   margin: 0;
   padding: 0;
+  scroll-padding-top: 2rem;
+  scroll-behavior: smooth;
+  list-style: none;
+  text-decoration: none;
 }
 *,
 *:before,
@@ -23,10 +27,14 @@ label,
 button {
   cursor: pointer;
 }
+ul {
+  list-style: none;
+}
 a {
   text-decoration: none;
 }
 img {
   display: block;
   max-width: 100%;
+  height: auto;
 }
