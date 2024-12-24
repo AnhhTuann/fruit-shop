@@ -32,7 +32,7 @@
         <div class="nav__menu" id="nav-menu">
           <ul class="nav__list">
             <li class="nav__item">
-              <a href="#home" class="nav__link">Home</a>
+              <a href="#home" class="nav__link active-link">Home</a>
             </li>
             <li class="nav__item">
               <a href="#about" class="nav__link">About Us</a>
@@ -54,9 +54,13 @@
           <img src="img/fruit-line-1.png" alt="" class="nav__img-2" />
         </div>
 
-        <!-- Toggle button -->
-        <div class="nav__toggle" id="nav-toggle">
-          <i class="ri-apps-2-line"></i>
+        <div class="nav__buttons">
+          <!-- Theme button -->
+          <i class="ri-moon-line change-theme" id="theme-button"></i>
+          <!-- Toggle button -->
+          <div class="nav__toggle" id="nav-toggle">
+            <i class="ri-apps-2-line"></i>
+          </div>
         </div>
       </nav>
     </header>
@@ -313,15 +317,6 @@
               </a>
             </div>
           </div>
-
-          <div>
-            <h3 class="footer__title"></h3>
-            <ul class="footer__links">
-              <li><a href="" class="footer__link"></a></li>
-              <li><a href="" class="footer__link"></a></li>
-              <li><a href="" class="footer__link"></a></li>
-            </ul>
-          </div>
         </div>
         <img src="img/fruit-line-3.png" alt="image" class="footer__fruit" />
         <img src="img/branch-1.png" alt="image" class="footer__branch-1" />
@@ -333,6 +328,9 @@
     </footer>
 
     <!--========== SCROLL UP ==========-->
+    <a href="#" class="scrollup" id="scroll-up">
+      <i class="ri-arrow-up-s-line"></i>
+    </a>
 
     <!--=============== SCROLLREVEAL ===============-->
     <script src=""></script>

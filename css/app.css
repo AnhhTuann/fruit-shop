@@ -124,6 +124,42 @@ h4 {
   box-shadow: 0 8px 24px rgba(140, 102, 122.4, 0.3);
 }
 
+::-webkit-scrollbar {
+  width: 0.6rem;
+  border-radius: 0.5rem;
+  background-color: hsl(0, 0%, 85%);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: 0.5rem;
+  background-color: hsl(0, 0%, 65%);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(0, 0%, 55%);
+}
+
+.scrollup {
+  position: fixed;
+  right: 1rem;
+  bottom: -50%;
+  background-color: hsl(0, 0%, 100%);
+  box-shadow: 0 2px 16px hsla(0, 0%, 0%, 0.1);
+  display: inline-flex;
+  padding: 8px;
+  border-radius: 0.25rem;
+  font-size: 1.25rem;
+  color: hsl(140, 4%, 12%);
+  z-index: 10;
+  transition: bottom 0.4s, transform 0.4s, background-color 0.4s;
+}
+.scrollup:hover {
+  transform: translateY(-0.5rem);
+}
+
+.show-scroll {
+  bottom: 3rem;
+}
+
 body {
   font-family: "Poppins", sans-serif;
 }
@@ -196,6 +232,11 @@ body {
   right: 2.5rem;
   bottom: 2.5rem;
 }
+.nav__buttons {
+  display: flex;
+  align-items: center;
+  column-gap: 1rem;
+}
 
 @media screen and (max-width: 1150px) {
   .nav__menu {
@@ -215,6 +256,16 @@ body {
 
 .show-menu {
   top: 0;
+}
+
+.active-link {
+  color: hsl(140, 40%, 48%);
+}
+
+.change-theme {
+  font-size: 1.25rem;
+  color: hsl(140, 4%, 12%);
+  cursor: pointer;
 }
 
 .home {
@@ -271,7 +322,7 @@ body {
   width: 120px;
   margin: 0 auto 0.75rem;
   filter: drop-shadow(0 8px 12px hsla(0, 0%, 0%, 0.2));
-  transition: tranform 0.4s;
+  transition: transform 0.4s;
 }
 .enjoy__bg {
   width: 100%;
@@ -543,6 +594,114 @@ body {
   text-align: center;
   font-size: 0.813rem;
   color: hsl(140, 4%, 64%);
+}
+
+body.dark-theme {
+  /*========= Dark mode variables =========*/
+  /*========= Global styles =========*/
+  background-color: hsl(0, 0%, 10%);
+  color: hsl(140, 4%, 70%);
+  /*========= Header styles =========*/
+  /*========= Home styles =========*/
+  /*========= Enjoy styles =========*/
+  /*========= About styles =========*/
+  /*========= Popular styles =========*/
+  /*========= Footer styles =========*/
+}
+body.dark-theme h1,
+body.dark-theme h2,
+body.dark-theme h3,
+body.dark-theme h4 {
+  color: hsl(140, 4%, 90%);
+}
+body.dark-theme .header {
+  background-color: hsl(0, 0%, 10%);
+}
+body.dark-theme .nav__logo, body.dark-theme .nav__toggle, body.dark-theme .nav__close {
+  color: hsl(140, 4%, 90%);
+}
+body.dark-theme .nav__menu {
+  background-color: hsl(0, 0%, 14%);
+}
+body.dark-theme .nav__img-1, body.dark-theme .nav__img-2 {
+  filter: initial;
+}
+body.dark-theme .nav__link {
+  color: hsl(140, 4%, 90%);
+}
+body.dark-theme .nav__link:hover {
+  color: hsl(140, 30%, 45%);
+}
+@media screen and (max-width: 1150px) {
+  body.dark-theme {
+    background-color: hsl(0, 0%, 10%);
+  }
+}
+body.dark-theme .active-link {
+  color: hsl(140, 30%, 45%);
+}
+body.dark-theme .change-theme {
+  font-size: 1.25rem;
+  color: hsl(140, 4%, 90%);
+  cursor: pointer;
+}
+body.dark-theme .home__fruit, body.dark-theme .home__branch {
+  filter: initial;
+}
+body.dark-theme .home__img {
+  filter: drop-shadow(0 8px 12px hsla(0, 0%, 0%, 0.6));
+}
+body.dark-theme .enjoy__img {
+  filter: drop-shadow(0 8px 12px hsla(0, 0%, 0%, 0.6));
+}
+body.dark-theme .enjoy__bg {
+  background-color: hsl(0, 0%, 14%);
+}
+body.dark-theme .about__fruit, body.dark-theme .about__branch {
+  filter: initial;
+}
+body.dark-theme .about__img {
+  filter: drop-shadow(0 8px 12px hsla(0, 0%, 0%, 0.6));
+}
+body.dark-theme .popular__bg {
+  background-color: hsl(0, 0%, 14%);
+}
+body.dark-theme .popular__img {
+  filter: drop-shadow(0 8px 12px hsla(0, 0%, 0%, 0.6));
+}
+body.dark-theme .footer__logo {
+  color: hsl(140, 4%, 90%);
+}
+body.dark-theme .footer__link {
+  color: hsl(140, 4%, 70%);
+}
+body.dark-theme .footer__link:hover {
+  color: hsl(140, 30%, 45%);
+}
+body.dark-theme .footer__social-link {
+  color: hsl(140, 30%, 45%);
+}
+body.dark-theme .footer__fruit, body.dark-theme .footer__branch-1, body.dark-theme .footer__branch-2 {
+  filter: initial;
+}
+body.dark-theme .scrollup {
+  background-color: hsl(0, 0%, 14%);
+  color: hsl(140, 4%, 90%);
+}
+
+.dark-theme:is(.shadow-header, .nav__menu, .scrollup) {
+  box-shadow: 0 2px 16px hsla(0, 0%, 0%, 0.3);
+}
+
+.dark-theme::-webkit-scrollbar {
+  background-color: hsl(0, 0%, 15%);
+}
+
+.dark-theme::-webkit-scrollbar-thumb {
+  background-color: hsl(0, 0%, 30%);
+}
+.dark-theme::-webkit-scrollbar-thumb:hover {
+  background-color: hsl(0, 0%, 40%);
 }
 
 /*# sourceMappingURL=app.css.map */
