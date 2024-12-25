@@ -177,7 +177,6 @@
     &__list {
       flex-direction: row;
       column-gap: 4rem;
-      background-color: hsl(0, 0%, 10%);
     }
   }
 
@@ -339,5 +338,14 @@
 
   .scrollup {
     right: 3rem;
+  }
+
+  .dark-theme {
+    .nav__list {
+      background-color: hsl(0, 0%, 10%);
+    }
+    .nav__menu {
+      box-shadow: none;
+    }
   }
 }
