@@ -41,3 +41,22 @@ backend/
 - `npx prisma migrate dev`: Khởi tạo file migration mới mỗi khi thay đổi file `schema.prisma`.
 - `npm run build`: Biên dịch TypeScript sang JavaScript để chạy Production.
 - `npm run start`: Chạy file đã biên dịch (`node dist/index.js`).
+
+## 🖼️ Tải ảnh sản phẩm về máy (One-time Image Download)
+
+Để đảm bảo ảnh tải nhanh khi chạy ứng dụng, chúng ta tải toàn bộ ảnh trái cây về máy một lần thay vì fetch từ URL bên ngoài mỗi lần load.
+
+**Bước 1:** Tải ảnh từ Unsplash về thư mục `frontend/public/fruits/`:
+```bash
+node scripts/downloadFruitImages.js
+```
+
+**Bước 2:** Seed lại Database để cập nhật `imageUrl` sang đường dẫn local:
+```bash
+npx prisma db seed
+```
+
+Sau bước này, toàn bộ ảnh được serve thẳng từ ổ cứng qua Vite static server — tốc độ tải gần như tức thì.
+
+> **Lưu ý:** Script tự động bỏ qua (skip) những ảnh đã tải. Chạy lại nhiều lần là an toàn.
+

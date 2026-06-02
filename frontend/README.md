@@ -42,3 +42,18 @@ frontend/src/
 - `npm run dev`: Chạy server phát triển (cổng 3000).
 - `npm run build`: Build dự án ra mã tĩnh (chuẩn bị đẩy lên Vercel/Netlify).
 - `npm run preview`: Chạy thử file build cục bộ.
+
+## 🖼️ Ảnh sản phẩm (Product Images)
+
+Ảnh trái cây được lưu tại `public/fruits/` và phục vụ thẳng từ Vite static server — không cần request ra ngoài.
+
+| File | Mô tả |
+|---|---|
+| `public/fruits/apple.jpg` | Ảnh từng loại trái cây, tên theo format `tên-viết-thường.jpg` |
+| `public/fruits/default-fruit.jpg` | Ảnh dự phòng nếu một trái cây chưa có ảnh riêng |
+
+Để tải ảnh về máy (thực hiện ở thư mục `backend`):
+```bash
+node scripts/downloadFruitImages.js
+```
+

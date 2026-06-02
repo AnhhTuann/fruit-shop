@@ -41,8 +41,8 @@ async function main() {
     // Random giá tiền từ $1.00 đến $10.00
     price: parseFloat((Math.random() * 9 + 1).toFixed(2)),
     categoryId: defaultCategory.id,
-    // Use Pollinations AI for consistent, beautiful studio-quality images on white backgrounds
-    imageUrl: `https://image.pollinations.ai/prompt/${encodeURIComponent(`A highly detailed studio photography of a fresh ${fruit.name} fruit, isolated on a clean solid white background`)}?width=600&height=400&nologo=true`
+    // Use local image stored in frontend/public/fruits/
+    imageUrl: `/fruits/${formatFruitName(fruit.name)}.jpg`
   }));
 
   // 4. Insert hàng loạt vào Database
