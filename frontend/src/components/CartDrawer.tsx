@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
 import { useMutation } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 import { useCartStore, selectTotalPrice } from '../store/cartStore';
 import { useAuthStore } from '../store/authStore';
 import { CREATE_ORDER } from '../graphql/mutations';
@@ -8,14 +9,16 @@ import { CREATE_ORDER } from '../graphql/mutations';
 export default function CartDrawer() {
   const { cartItems, isCartOpen, toggleCart, updateQuantity, removeFromCart, clearCart } = useCartStore();
   const totalPrice = useCartStore(selectTotalPrice);
-  const { user, toggleLoginModal } = useAuthStore();
+  const { user } = useAuthStore();
+  const navigate = useNavigate();
   
   const [createOrder, { loading }] = useMutation(CREATE_ORDER);
   const [checkoutMessage, setCheckoutMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
 
   const handleCheckout = async () => {
     if (!user) {
-      toggleLoginModal();
+      toggleCart();
+      navigate('/login');
       return;
     }
 

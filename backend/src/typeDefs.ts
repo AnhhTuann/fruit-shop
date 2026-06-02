@@ -37,6 +37,7 @@ export const typeDefs = `#graphql
   }
 
   type Query {
+    me: User
     products: [Product!]!
     productsByCategory(categoryId: ID!): [Product!]!
   }

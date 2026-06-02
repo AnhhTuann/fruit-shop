@@ -1,12 +1,31 @@
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-const prisma = new PrismaClient();
+import { Pool } from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 const JWT_SECRET = process.env.JWT_SECRET || 'supersecretkey_change_in_production';
 
 export const resolvers = {
   Query: {
+    // Fetch current user profile and orders
+    me: async (_: any, __: any, context: any) => {
+      if (!context.userId) return null;
+      return await prisma.user.findUnique({
+        where: { id: Number(context.userId) },
+        include: {
+          orders: {
+            include: { products: true },
+            orderBy: { createdAt: 'desc' }
+          }
+        }
+      });
+    },
     // Fetch all products
     products: async () => {
       return await prisma.product.findMany({

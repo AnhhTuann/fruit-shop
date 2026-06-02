@@ -1,46 +1,43 @@
 import { ShoppingCart, User, Menu, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCartStore, selectTotalItems } from '../store/cartStore';
 import { useAuthStore } from '../store/authStore';
 
 export default function Header() {
   const toggleCart = useCartStore(state => state.toggleCart);
   const totalItems = useCartStore(selectTotalItems);
-  const { user, toggleLoginModal, logout } = useAuthStore();
+  const { user, logout } = useAuthStore();
+  const navigate = useNavigate();
   
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-lime-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
-          <div className="flex items-center gap-2">
-            <div className="w-10 h-10 bg-emerald-500 rounded-full flex items-center justify-center">
-              <span className="text-xl filter drop-shadow-sm text-white">🍋</span>
+          <Link to="/" className="flex items-center space-x-2">
+            <div className="bg-emerald-500 p-2 rounded-xl transform -rotate-6">
+              <ShoppingCart className="h-6 w-6 text-white" />
             </div>
-            <span className="text-2xl font-black tracking-tight text-emerald-800">
-              Fruit<span className="text-orange-500">Shop</span>
-            </span>
-          </div>
+            <span className="text-2xl font-black text-emerald-900 tracking-tight">Fruit Shop</span>
+          </Link>
           
           <nav className="hidden md:flex space-x-8">
-            {['Home', 'Shop', 'Blog', 'Contact'].map((item) => (
-              <a 
-                key={item}
-                href={`#${item.toLowerCase()}`} 
-                className={`font-bold text-sm uppercase tracking-widest transition-colors ${item === 'Home' ? 'text-orange-500' : 'text-emerald-700 hover:text-orange-400'}`}
-              >
-                {item}
-              </a>
-            ))}
+            <Link to="/" className="text-emerald-700 font-bold hover:text-emerald-500 transition-colors">Home</Link>
+            <Link to="/#categories" className="text-emerald-700 font-bold hover:text-emerald-500 transition-colors">Categories</Link>
+            <Link to="/#products" className="text-emerald-700 font-bold hover:text-emerald-500 transition-colors">Products</Link>
           </nav>
 
           <div className="flex items-center space-x-5">
             {user ? (
               <div className="flex items-center gap-3 relative group">
-                <div className="flex items-center gap-2 cursor-pointer p-2 hover:bg-lime-100 rounded-full transition-colors">
+                <Link 
+                  to="/profile"
+                  className="flex items-center gap-2 cursor-pointer p-2 hover:bg-lime-100 rounded-full transition-colors"
+                >
                   <User className="h-6 w-6 text-emerald-700" />
                   <span className="hidden sm:block text-sm font-bold text-emerald-800">{user.name}</span>
-                </div>
+                </Link>
                 <button 
-                  onClick={logout}
+                  onClick={() => { logout(); navigate('/'); }}
                   className="p-2 hover:bg-red-50 text-red-500 rounded-full transition-colors group-hover:block sm:hidden absolute top-full mt-2 right-0 bg-white border border-red-100 shadow-md sm:relative sm:top-auto sm:mt-0 sm:bg-transparent sm:border-none sm:shadow-none sm:group-hover:block" 
                   title="Logout"
                 >
@@ -48,13 +45,13 @@ export default function Header() {
                 </button>
               </div>
             ) : (
-              <button 
-                onClick={toggleLoginModal}
+              <Link 
+                to="/login"
                 className="p-2 hover:bg-lime-100 rounded-full text-emerald-700 transition-colors" 
                 aria-label="Login"
               >
                 <User className="h-6 w-6" />
-              </button>
+              </Link>
             )}
             <button 
               onClick={toggleCart}

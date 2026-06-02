@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useMutation, gql } from '@apollo/client';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
-import { X } from 'lucide-react';
 
 const LOGIN_MUTATION = gql`
   mutation Login($email: String!, $password: String!) {
@@ -21,9 +21,8 @@ export default function LoginModal() {
   const [password, setPassword] = useState('');
   const [loginMutation, { loading, error }] = useMutation(LOGIN_MUTATION);
   
-  const { isLoginModalOpen, toggleLoginModal, login } = useAuthStore();
-
-  if (!isLoginModalOpen) return null;
+  const { login } = useAuthStore();
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,6 +30,7 @@ export default function LoginModal() {
       const { data } = await loginMutation({ variables: { email, password } });
       if (data?.login?.token) {
         login(data.login.token, data.login.user);
+        navigate('/profile');
       }
     } catch (err) {
       console.error(err);
@@ -38,24 +38,10 @@ export default function LoginModal() {
   };
 
   return (
-    <>
-      <div 
-        className="fixed inset-0 bg-emerald-900/40 backdrop-blur-sm z-[60] transition-opacity flex items-center justify-center p-4"
-        onClick={toggleLoginModal}
-      >
-        <div 
-          className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-lime-200 relative overflow-hidden transform transition-all"
-          onClick={e => e.stopPropagation()}
-        >
-          <button 
-            onClick={toggleLoginModal}
-            className="absolute top-4 right-4 p-2 bg-lime-50 hover:bg-lime-100 rounded-full text-emerald-700 transition-colors z-10"
-          >
-            <X className="h-5 w-5" />
-          </button>
-
-          <div className="p-8">
-            <h2 className="text-3xl font-black text-emerald-900 mb-2 text-center">Welcome Back</h2>
+    <div className="min-h-[70vh] flex items-center justify-center p-4">
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-xl border border-lime-200 relative overflow-hidden">
+        <div className="p-8">
+          <h2 className="text-3xl font-black text-emerald-900 mb-2 text-center">Welcome Back</h2>
             <p className="text-emerald-600 text-center mb-8">Sign in to access your fresh fruits.</p>
             
             {error && (
@@ -100,6 +86,5 @@ export default function LoginModal() {
           </div>
         </div>
       </div>
-    </>
   );
 }

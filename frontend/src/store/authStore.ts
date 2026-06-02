@@ -11,10 +11,8 @@ interface User {
 interface AuthState {
   token: string | null;
   user: User | null;
-  isLoginModalOpen: boolean;
   login: (token: string, user: User) => void;
   logout: () => void;
-  toggleLoginModal: () => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -22,16 +20,14 @@ export const useAuthStore = create<AuthState>()(
     (set) => ({
       token: null,
       user: null,
-      isLoginModalOpen: false,
       login: (token, user) => {
         setLocalToken(token);
-        set({ token, user, isLoginModalOpen: false });
+        set({ token, user });
       },
       logout: () => {
         removeToken();
         set({ token: null, user: null });
       },
-      toggleLoginModal: () => set((state) => ({ isLoginModalOpen: !state.isLoginModalOpen })),
     }),
     {
       name: 'fruit-shop-auth',
