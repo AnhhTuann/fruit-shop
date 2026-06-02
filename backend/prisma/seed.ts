@@ -1,79 +1,52 @@
+import 'dotenv/config';
 import { PrismaClient } from '@prisma/client';
-import bcrypt from 'bcryptjs';
+import { Pool } from 'pg';
+import { PrismaPg } from '@prisma/adapter-pg';
 
-const prisma = new PrismaClient();
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const adapter = new PrismaPg(pool);
+const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log('Seeding database...');
+  console.log('Fetching fruit data from Fruityvice API...');
+  
+  // 1. Gọi API lấy data trái cây thật
+  const response = await fetch('https://www.fruityvice.com/api/fruit/all');
+  const fruits = await response.json();
 
-  // 1. Create a dummy admin user
-  const hashedPassword = await bcrypt.hash('admin123', 10);
-  const admin = await prisma.user.upsert({
-    where: { email: 'admin@fruitshop.com' },
+  console.log(`Found ${fruits.length} fruits. Seeding database...`);
+
+  // 2. Tạo Category mặc định
+  const defaultCategory = await prisma.category.upsert({
+    where: { name: 'Fresh Fruits' },
     update: {},
-    create: {
-      email: 'admin@fruitshop.com',
-      name: 'Admin User',
-      password: hashedPassword,
-    },
+    create: { name: 'Fresh Fruits', description: 'All fresh fruits from API' },
   });
 
-  // 2. Create Categories
-  const citrus = await prisma.category.upsert({
-    where: { name: 'Citrus' },
-    update: {},
-    create: { name: 'Citrus', description: 'Fresh and tangy citrus fruits' },
-  });
+  // Helper to format names: "Navel Orange" -> "navel-orange"
+  const formatFruitName = (name: string) => {
+    return name.toLowerCase().replace(/\s+/g, '-');
+  };
 
-  const tropical = await prisma.category.upsert({
-    where: { name: 'Tropical' },
-    update: {},
-    create: { name: 'Tropical', description: 'Exotic tropical fruits' },
-  });
+  // 3. Map data từ API sang format của Prisma Product
+  const productData = fruits.map((fruit: any) => ({
+    name: fruit.name,
+    // Lấy thông tin dinh dưỡng làm mô tả sản phẩm cho xịn
+    description: `Family: ${fruit.family}. Calories: ${fruit.nutritions.calories}kcal, Sugar: ${fruit.nutritions.sugar}g.`,
+    // Random giá tiền từ $1.00 đến $10.00
+    price: parseFloat((Math.random() * 9 + 1).toFixed(2)),
+    categoryId: defaultCategory.id,
+    // Use local image path mapped by formatting the fruit name
+    imageUrl: `/fruits/${formatFruitName(fruit.name)}.jpg`
+  }));
 
-  // 3. Create Products
+  // 4. Insert hàng loạt vào Database
   await prisma.product.createMany({
     skipDuplicates: true,
-    data: [
-      {
-        name: 'Navel Orange',
-        description: 'Sweet, seedless oranges perfect for snacking.',
-        price: 1.50,
-        categoryId: citrus.id,
-        imageUrl: 'https://images.unsplash.com/photo-1611080626919-7cf5a9dbab5b?auto=format&fit=crop&w=600&q=80'
-      },
-      {
-        name: 'Lemon',
-        description: 'Tart lemons ideal for cooking and beverages.',
-        price: 0.80,
-        categoryId: citrus.id,
-        imageUrl: 'https://images.unsplash.com/photo-1588612140409-566fc6841753?auto=format&fit=crop&w=600&q=80'
-      },
-      {
-        name: 'Mango',
-        description: 'Juicy, ripe tropical mangos.',
-        price: 2.99,
-        categoryId: tropical.id,
-        imageUrl: 'https://images.unsplash.com/photo-1553279768-865429fa0078?auto=format&fit=crop&w=600&q=80'
-      },
-      {
-        name: 'Pineapple',
-        description: 'Sweet and golden whole pineapple.',
-        price: 4.50,
-        categoryId: tropical.id,
-        imageUrl: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?auto=format&fit=crop&w=600&q=80'
-      }
-    ],
+    data: productData,
   });
 
-  console.log('Database seeded successfully!');
+  console.log('Database seeded successfully with API data!');
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+main().then(() => prisma.$disconnect());

@@ -40,6 +40,7 @@ export const typeDefs = `#graphql
     me: User
     products: [Product!]!
     productsByCategory(categoryId: ID!): [Product!]!
+    product(id: ID!): Product
   }
 
   type Mutation {

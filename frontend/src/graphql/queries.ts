@@ -15,6 +15,21 @@ export const GET_PRODUCTS = gql`
   }
 `;
 
+export const GET_PRODUCT_BY_ID = gql`
+  query GetProductById($id: ID!) {
+    product(id: $id) {
+      id
+      name
+      description
+      price
+      imageUrl
+      category {
+        name
+      }
+    }
+  }
+`;
+
 export const GET_USER_PROFILE = gql`
   query GetUserProfile {
     me {

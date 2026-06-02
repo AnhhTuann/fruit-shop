@@ -39,6 +39,13 @@ export const resolvers = {
         include: { category: true }
       });
     },
+    // Fetch a single product by ID
+    product: async (_: any, { id }: { id: string }) => {
+      return await prisma.product.findUnique({
+        where: { id: Number(id) },
+        include: { category: true }
+      });
+    },
   },
   Mutation: {
     login: async (_: any, { email, password }: any) => {

@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import CartDrawer from './components/CartDrawer';
 import LoginModal from './components/LoginModal';
 import Profile from './components/Profile';
+import ProductDetail from './pages/ProductDetail';
 import { Routes, Route } from 'react-router-dom';
 
 export default function App() {
@@ -29,6 +30,7 @@ export default function App() {
           } />
           <Route path="/login" element={<LoginModal />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
       </main>
       <Footer />
