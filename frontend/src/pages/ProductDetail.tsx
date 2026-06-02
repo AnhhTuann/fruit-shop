@@ -9,6 +9,7 @@ export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
+  const [imageLoaded, setImageLoaded] = useState(false);
   const addToCart = useCartStore((state) => state.addToCart);
 
   const { data, loading, error } = useQuery(GET_PRODUCT_BY_ID, {
@@ -82,14 +83,23 @@ export default function ProductDetail() {
             <div className="absolute top-6 left-6 bg-white/90 backdrop-blur-md px-4 py-2 rounded-full text-sm font-bold text-emerald-700 uppercase tracking-widest z-10">
               {product.category?.name || 'Fresh'}
             </div>
+            
+            {/* Image Skeleton */}
+            {!imageLoaded && (
+              <div className="absolute inset-0 bg-lime-100 animate-pulse flex items-center justify-center z-0">
+                 <div className="w-12 h-12 border-4 border-emerald-200 border-t-emerald-500 rounded-full animate-spin"></div>
+              </div>
+            )}
+            
             <img 
               src={product.imageUrl || `/fruits/default-fruit.jpg`} 
               alt={product.name} 
-              className="w-full h-full object-contain drop-shadow-2xl group-hover:scale-105 transition-transform duration-500"
+              className={`w-full h-full object-contain drop-shadow-2xl transition-all duration-700 relative z-0 ${imageLoaded ? 'opacity-100 group-hover:scale-105' : 'opacity-0'}`}
               referrerPolicy="no-referrer"
+              onLoad={() => setImageLoaded(true)}
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = '/fruits/default-fruit.jpg';
+                target.src = `https://image.pollinations.ai/prompt/${encodeURIComponent(`A highly detailed studio photography of a fresh ${product.name} fruit, isolated on a clean solid white background`)}?width=600&height=400&nologo=true`;
                 target.onerror = null;
               }}
             />

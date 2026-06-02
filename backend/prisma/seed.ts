@@ -8,6 +8,11 @@ const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
+  console.log('Cleaning old data...');
+  // Xóa hết sản phẩm và danh mục cũ để tránh bị Prisma trùng lặp và skip
+  await prisma.product.deleteMany({});
+  await prisma.category.deleteMany({});
+
   console.log('Fetching fruit data from Fruityvice API...');
   
   // 1. Gọi API lấy data trái cây thật
@@ -36,8 +41,8 @@ async function main() {
     // Random giá tiền từ $1.00 đến $10.00
     price: parseFloat((Math.random() * 9 + 1).toFixed(2)),
     categoryId: defaultCategory.id,
-    // Use local image path mapped by formatting the fruit name
-    imageUrl: `/fruits/${formatFruitName(fruit.name)}.jpg`
+    // Use Pollinations AI for consistent, beautiful studio-quality images on white backgrounds
+    imageUrl: `https://image.pollinations.ai/prompt/${encodeURIComponent(`A highly detailed studio photography of a fresh ${fruit.name} fruit, isolated on a clean solid white background`)}?width=600&height=400&nologo=true`
   }));
 
   // 4. Insert hàng loạt vào Database

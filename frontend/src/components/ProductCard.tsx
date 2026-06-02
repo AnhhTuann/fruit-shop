@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ShoppingBag, Star } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Product } from '../types';
@@ -9,18 +9,26 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onAddToCart }: ProductCardProps) {
+  const [imageLoaded, setImageLoaded] = useState(false);
+
   return (
     <div className="bg-white rounded-3xl p-4 shadow-sm hover:shadow-md transition-all duration-300 border border-lime-200 flex flex-col group">
       <Link to={`/product/${product.id}`} className="relative aspect-[4/3] overflow-hidden bg-lime-50 rounded-2xl mb-4 flex items-center justify-center block">
+        {/* Image Skeleton */}
+        {!imageLoaded && (
+          <div className="absolute inset-0 bg-lime-100 animate-pulse"></div>
+        )}
+        
         <img 
           src={product.imageUrl || `/fruits/default-fruit.jpg`} 
           alt={product.name} 
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+          className={`w-full h-full object-cover transition-all duration-700 ${imageLoaded ? 'opacity-100 group-hover:scale-110' : 'opacity-0'}`}
           referrerPolicy="no-referrer"
           loading="lazy"
+          onLoad={() => setImageLoaded(true)}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = '/fruits/default-fruit.jpg';
+            target.src = `https://image.pollinations.ai/prompt/${encodeURIComponent(`A highly detailed studio photography of a fresh ${product.name} fruit, isolated on a clean solid white background`)}?width=600&height=400&nologo=true`;
             target.onerror = null;
           }}
         />
