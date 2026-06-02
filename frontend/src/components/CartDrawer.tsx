@@ -1,9 +1,48 @@
+import { useState } from 'react';
 import { X, Minus, Plus, ShoppingBag } from 'lucide-react';
+import { useMutation } from '@apollo/client';
 import { useCartStore, selectTotalPrice } from '../store/cartStore';
+import { useAuthStore } from '../store/authStore';
+import { CREATE_ORDER } from '../graphql/mutations';
 
 export default function CartDrawer() {
-  const { cartItems, isCartOpen, toggleCart, updateQuantity, removeFromCart } = useCartStore();
+  const { cartItems, isCartOpen, toggleCart, updateQuantity, removeFromCart, clearCart } = useCartStore();
   const totalPrice = useCartStore(selectTotalPrice);
+  const { user, toggleLoginModal } = useAuthStore();
+  
+  const [createOrder, { loading }] = useMutation(CREATE_ORDER);
+  const [checkoutMessage, setCheckoutMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+
+  const handleCheckout = async () => {
+    if (!user) {
+      toggleLoginModal();
+      return;
+    }
+
+    // Since our backend takes an array of IDs, we expand the cart items based on their quantity
+    // E.g., if Navel Orange has quantity 2, we pass its ID twice.
+    const productIds: string[] = [];
+    cartItems.forEach(item => {
+      for (let i = 0; i < item.quantity; i++) {
+        productIds.push(item.id);
+      }
+    });
+
+    try {
+      setCheckoutMessage(null);
+      await createOrder({ variables: { productIds } });
+      clearCart();
+      setCheckoutMessage({ type: 'success', text: 'Order placed successfully!' });
+      
+      // Auto clear message after a few seconds
+      setTimeout(() => {
+        setCheckoutMessage(null);
+      }, 3000);
+    } catch (err: any) {
+      console.error('Checkout failed:', err);
+      setCheckoutMessage({ type: 'error', text: err.message || 'Failed to place order.' });
+    }
+  };
 
   return (
     <>
@@ -83,15 +122,24 @@ export default function CartDrawer() {
         </div>
 
         <div className="p-4 border-t border-lime-100 bg-lime-50/30">
+          {checkoutMessage && (
+            <div className={`mb-4 p-3 rounded-xl text-sm font-bold text-center ${
+              checkoutMessage.type === 'success' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-50 text-red-600'
+            }`}>
+              {checkoutMessage.text}
+            </div>
+          )}
+          
           <div className="flex justify-between items-center mb-4">
             <span className="text-emerald-700 font-bold">Subtotal</span>
             <span className="text-xl font-black text-emerald-900">${totalPrice.toFixed(2)}</span>
           </div>
           <button 
-            disabled={cartItems.length === 0}
-            className="w-full py-4 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl font-black text-lg transition-colors shadow-md"
+            onClick={handleCheckout}
+            disabled={cartItems.length === 0 || loading}
+            className="w-full py-4 bg-orange-500 hover:bg-orange-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white rounded-xl font-black text-lg transition-colors shadow-md flex justify-center items-center"
           >
-            Checkout
+            {loading ? 'Processing...' : 'Checkout'}
           </button>
         </div>
       </div>
