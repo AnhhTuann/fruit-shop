@@ -8,7 +8,7 @@ datasource db {
 
 model User {
   id        Int      @id @default(autoincrement())
-  email     String   @unique
+  email     String   @unique                       // Index tự động trên @unique
   password  String
   name      String?
   orders    Order[]
@@ -17,7 +17,7 @@ model User {
 
 model Category {
   id          Int       @id @default(autoincrement())
-  name        String    @unique
+  name        String    @unique                    // Index tự động trên @unique
   description String?
   products    Product[]
 }
@@ -31,6 +31,11 @@ model Product {
   categoryId  Int
   category    Category @relation(fields: [categoryId], references: [id])
   orders      Order[]  @relation("OrderProducts")
+
+  // Indexes giúp tăng tốc query lọc theo category và tìm kiếm theo tên
+  @@index([categoryId])
+  @@index([name])
+  @@index([price])
 }
 
 model Order {
@@ -41,4 +46,9 @@ model Order {
   total     Float
   status    String    @default("PENDING")
   createdAt DateTime  @default(now())
+
+  // Indexes giúp tăng tốc query lịch sử đơn hàng của user
+  @@index([userId])
+  @@index([createdAt])
+  @@index([status])
 }
