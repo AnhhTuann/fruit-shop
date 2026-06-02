@@ -6,6 +6,11 @@ export const typeDefs = `#graphql
     orders: [Order!]!
   }
 
+  type AuthPayload {
+    token: String!
+    user: User!
+  }
+
   type Category {
     id: ID!
     name: String!
@@ -37,6 +42,7 @@ export const typeDefs = `#graphql
   }
 
   type Mutation {
-    createOrder(userId: ID!, productIds: [ID!]!): Order!
+    login(email: String!, password: String!): AuthPayload!
+    createOrder(productIds: [ID!]!): Order!
   }
 `;

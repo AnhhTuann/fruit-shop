@@ -1,6 +1,9 @@
 import { ShoppingCart, User, Menu } from 'lucide-react';
+import { useCartStore, selectTotalItems } from '../store/cartStore';
 
 export default function Header() {
+  const toggleCart = useCartStore(state => state.toggleCart);
+  const totalItems = useCartStore(selectTotalItems);
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-lime-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,11 +33,17 @@ export default function Header() {
             <button className="p-2 hover:bg-lime-100 rounded-full text-emerald-700 transition-colors" aria-label="User Profile">
               <User className="h-6 w-6" />
             </button>
-            <button className="relative p-2 bg-emerald-100 text-emerald-600 rounded-full transition-colors" aria-label="Shopping Cart">
+            <button 
+              onClick={toggleCart}
+              className="relative p-2 bg-emerald-100 text-emerald-600 rounded-full hover:bg-emerald-200 transition-colors" 
+              aria-label="Shopping Cart"
+            >
               <ShoppingCart className="h-6 w-6" />
-              <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full border-2 border-white font-bold">
-                3
-              </span>
+              {totalItems > 0 && (
+                <span className="absolute -top-2 -right-2 bg-orange-500 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full border-2 border-white font-bold">
+                  {totalItems}
+                </span>
+              )}
             </button>
             <button className="md:hidden p-2 hover:bg-lime-100 rounded-full text-emerald-700 transition-colors">
                <Menu className="h-6 w-6" />
