@@ -1,9 +1,12 @@
-import { ShoppingCart, User, Menu } from 'lucide-react';
+import { ShoppingCart, User, Menu, LogOut } from 'lucide-react';
 import { useCartStore, selectTotalItems } from '../store/cartStore';
+import { useAuthStore } from '../store/authStore';
 
 export default function Header() {
   const toggleCart = useCartStore(state => state.toggleCart);
   const totalItems = useCartStore(selectTotalItems);
+  const { user, toggleLoginModal, logout } = useAuthStore();
+  
   return (
     <header className="sticky top-0 z-50 w-full bg-white border-b border-lime-100">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -30,9 +33,29 @@ export default function Header() {
           </nav>
 
           <div className="flex items-center space-x-5">
-            <button className="p-2 hover:bg-lime-100 rounded-full text-emerald-700 transition-colors" aria-label="User Profile">
-              <User className="h-6 w-6" />
-            </button>
+            {user ? (
+              <div className="flex items-center gap-3 relative group">
+                <div className="flex items-center gap-2 cursor-pointer p-2 hover:bg-lime-100 rounded-full transition-colors">
+                  <User className="h-6 w-6 text-emerald-700" />
+                  <span className="hidden sm:block text-sm font-bold text-emerald-800">{user.name}</span>
+                </div>
+                <button 
+                  onClick={logout}
+                  className="p-2 hover:bg-red-50 text-red-500 rounded-full transition-colors group-hover:block sm:hidden absolute top-full mt-2 right-0 bg-white border border-red-100 shadow-md sm:relative sm:top-auto sm:mt-0 sm:bg-transparent sm:border-none sm:shadow-none sm:group-hover:block" 
+                  title="Logout"
+                >
+                  <LogOut className="h-5 w-5" />
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={toggleLoginModal}
+                className="p-2 hover:bg-lime-100 rounded-full text-emerald-700 transition-colors" 
+                aria-label="Login"
+              >
+                <User className="h-6 w-6" />
+              </button>
+            )}
             <button 
               onClick={toggleCart}
               className="relative p-2 bg-emerald-100 text-emerald-600 rounded-full hover:bg-emerald-200 transition-colors" 
